@@ -1,0 +1,431 @@
+<title>Daily Tasks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg: #FBF6EE;
+    --card: #FFFDF8;
+    --coral: #EC8570;
+    --coral-strong: #E05540;
+    --coral-soft: #F8E3DC;
+    --ink: #3E3630;
+    --ink-muted: #B5A99C;
+    --line: #E9DFD2;
+    --field: #FFFFFF;
+    --field-border: #DFD4C6;
+    --btn: #F6EFE4;
+    --btn-border: #DFD4C6;
+    --shadow: 0 10px 30px rgba(120, 80, 60, .10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #262019;
+      --card: #2F2822;
+      --coral: #E8836B;
+      --coral-strong: #F07A5F;
+      --coral-soft: #4A3229;
+      --ink: #F0E7DB;
+      --ink-muted: #857A6C;
+      --line: #453C32;
+      --field: #262019;
+      --field-border: #4A4034;
+      --btn: #3A322A;
+      --btn-border: #4A4034;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #262019;
+    --card: #2F2822;
+    --coral: #E8836B;
+    --coral-strong: #F07A5F;
+    --coral-soft: #4A3229;
+    --ink: #F0E7DB;
+    --ink-muted: #857A6C;
+    --line: #453C32;
+    --field: #262019;
+    --field-border: #4A4034;
+    --btn: #3A322A;
+    --btn-border: #4A4034;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px 14px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--card);
+    border: 3px solid var(--coral);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 22px 22px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .title {
+    font-family: "Archivo", "Noto Sans TC", sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: .14em;
+    margin: 0;
+  }
+  .head-right {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .pct {
+    font-family: "Archivo", "Noto Sans TC", sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: var(--coral-strong);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    transition: transform .2s ease;
+  }
+  .pct.pop { animation: pop .45s ease; }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.28); }
+    100% { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pct.pop { animation: none; }
+  }
+
+  button {
+    font-family: inherit;
+    font-size: .9rem;
+    color: var(--ink);
+    background: var(--btn);
+    border: 1.5px solid var(--btn-border);
+    border-radius: 9px;
+    padding: 7px 13px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  button:hover { border-color: var(--coral); }
+  button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--coral);
+    outline-offset: 2px;
+  }
+
+  .reset-btn {
+    font-size: .78rem;
+    padding: 4px 9px;
+    color: var(--ink-muted);
+  }
+  .reset-btn:hover { color: var(--coral-strong); }
+
+  .preset-row {
+    display: flex;
+    gap: 8px;
+  }
+  .preset-row select {
+    flex: 1;
+    min-width: 0;
+    font-family: inherit;
+    font-size: .9rem;
+    color: var(--ink);
+    background: var(--field);
+    border: 1.5px solid var(--field-border);
+    border-radius: 9px;
+    padding: 8px 10px;
+  }
+
+  .add-row {
+    display: flex;
+    align-items: stretch;
+    border: 1.5px solid var(--field-border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--field);
+  }
+  .add-row:focus-within { border-color: var(--coral); }
+  .add-row input {
+    flex: 1;
+    min-width: 0;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    padding: 11px 14px;
+  }
+  .add-row input:focus { outline: none; }
+  .add-row input::placeholder { color: var(--ink-muted); }
+  .add-btn {
+    width: 46px;
+    flex: none;
+    border: none;
+    border-radius: 0;
+    background: var(--coral);
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .add-btn:hover { background: var(--coral-strong); }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-height: 96px;
+  }
+  .list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 2px;
+    border-bottom: 1.5px dashed var(--line);
+  }
+  .task-label {
+    flex: 1;
+    min-width: 0;
+    font-size: .98rem;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    overflow-wrap: anywhere;
+  }
+  li.done .task-label {
+    color: var(--ink-muted);
+    text-decoration: line-through;
+  }
+  .task-label .mark { margin-right: 6px; }
+  .del-btn {
+    flex: none;
+    border: none;
+    background: transparent;
+    color: var(--ink-muted);
+    font-size: 1.05rem;
+    padding: 2px 8px;
+    line-height: 1;
+  }
+  .del-btn:hover { color: var(--coral-strong); }
+
+  .empty {
+    color: var(--ink-muted);
+    font-size: .9rem;
+    text-align: center;
+    padding: 30px 0;
+    margin: 0;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%) translateY(70px);
+    background: var(--ink);
+    color: var(--card);
+    font-size: .85rem;
+    padding: 8px 16px;
+    border-radius: 99px;
+    opacity: 0;
+    transition: transform .25s ease, opacity .25s ease;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+</style>
+
+<div class="card">
+  <div class="head">
+    <h1 class="title">DAILY TASKS</h1>
+    <div class="head-right">
+      <button class="reset-btn" id="resetBtn" title="取消所有勾選">重置</button>
+      <div class="pct" id="pct">0%</div>
+    </div>
+  </div>
+
+  <div class="preset-row">
+    <select id="presetSel" aria-label="選擇預設組">
+      <option value="1">預設組 1</option>
+      <option value="2">預設組 2</option>
+      <option value="3">預設組 3</option>
+    </select>
+    <button id="loadBtn">載入</button>
+    <button id="saveBtn">儲存</button>
+  </div>
+
+  <div class="add-row">
+    <input id="newTask" type="text" placeholder="新增提醒事項..." maxlength="120" aria-label="新增提醒事項">
+    <button class="add-btn" id="addBtn" aria-label="新增">+</button>
+  </div>
+
+  <ul class="list" id="list"></ul>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  var KEY = "daily-tasks-widget";
+  var state = { tasks: [], presets: {}, currentPreset: "1" };
+
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) {
+      var parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.tasks)) state = parsed;
+      if (!state.presets || typeof state.presets !== "object") state.presets = {};
+      if (!state.currentPreset) state.currentPreset = "1";
+    }
+  } catch (e) { /* 損壞資料就從空白開始 */ }
+
+  var listEl = document.getElementById("list");
+  var pctEl = document.getElementById("pct");
+  var inputEl = document.getElementById("newTask");
+  var presetSel = document.getElementById("presetSel");
+  var toastEl = document.getElementById("toast");
+  var toastTimer = null;
+
+  presetSel.value = state.currentPreset;
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 1800);
+  }
+
+  function render() {
+    listEl.textContent = "";
+    if (state.tasks.length === 0) {
+      var p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "還沒有提醒事項,先新增一個吧";
+      listEl.appendChild(p);
+    }
+    state.tasks.forEach(function (task, i) {
+      var li = document.createElement("li");
+      if (task.done) li.className = "done";
+
+      var label = document.createElement("span");
+      label.className = "task-label";
+      label.setAttribute("role", "checkbox");
+      label.setAttribute("aria-checked", task.done ? "true" : "false");
+      label.setAttribute("tabindex", "0");
+      if (task.done) {
+        var mark = document.createElement("span");
+        mark.className = "mark";
+        mark.textContent = "👍";
+        label.appendChild(mark);
+      }
+      label.appendChild(document.createTextNode(task.text));
+      label.addEventListener("click", function () { toggle(i); });
+      label.addEventListener("keydown", function (e) {
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(i); }
+      });
+
+      var del = document.createElement("button");
+      del.className = "del-btn";
+      del.textContent = "×";
+      del.setAttribute("aria-label", "刪除「" + task.text + "」");
+      del.addEventListener("click", function () {
+        state.tasks.splice(i, 1);
+        save();
+        render();
+      });
+
+      li.appendChild(label);
+      li.appendChild(del);
+      listEl.appendChild(li);
+    });
+    updatePct();
+  }
+
+  var lastPct = -1;
+  function updatePct() {
+    var total = state.tasks.length;
+    var done = state.tasks.filter(function (t) { return t.done; }).length;
+    var pct = total === 0 ? 0 : Math.round(done / total * 100);
+    pctEl.textContent = pct + "%";
+    if (pct === 100 && lastPct !== 100 && total > 0) {
+      pctEl.classList.remove("pop");
+      void pctEl.offsetWidth;
+      pctEl.classList.add("pop");
+    }
+    lastPct = pct;
+  }
+
+  function toggle(i) {
+    state.tasks[i].done = !state.tasks[i].done;
+    save();
+    render();
+  }
+
+  function addTask() {
+    var text = inputEl.value.trim();
+    if (!text) return;
+    state.tasks.push({ text: text, done: false });
+    inputEl.value = "";
+    save();
+    render();
+    inputEl.focus();
+  }
+
+  document.getElementById("addBtn").addEventListener("click", addTask);
+  inputEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") addTask();
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    state.tasks.forEach(function (t) { t.done = false; });
+    save();
+    render();
+  });
+
+  presetSel.addEventListener("change", function () {
+    state.currentPreset = presetSel.value;
+    save();
+  });
+
+  document.getElementById("saveBtn").addEventListener("click", function () {
+    state.presets[presetSel.value] = state.tasks.map(function (t) { return t.text; });
+    save();
+    toast("已儲存到預設組 " + presetSel.value);
+  });
+
+  document.getElementById("loadBtn").addEventListener("click", function () {
+    var preset = state.presets[presetSel.value];
+    if (!preset || preset.length === 0) {
+      toast("預設組 " + presetSel.value + " 是空的,先按「儲存」存入清單");
+      return;
+    }
+    state.tasks = preset.map(function (text) { return { text: text, done: false }; });
+    save();
+    render();
+    toast("已載入預設組 " + presetSel.value);
+  });
+
+  render();
+})();
+</script>
